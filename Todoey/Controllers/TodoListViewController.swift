@@ -4,11 +4,11 @@
 //
 //  Copyright © 2019 App Brewery. All rights reserved.
 //
-
 import UIKit
 import RealmSwift
 
-class TodoListViewController: UITableViewController {
+
+class TodoListViewController: SwipeTableViewController {
     
     var todoItems: Results<Item>?
     let realm = try! Realm()
@@ -23,7 +23,9 @@ class TodoListViewController: UITableViewController {
         super.viewDidLoad()
         
         print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
+        
     }
+
     
     
     // MARK: - TableView DataSource Methods
@@ -35,15 +37,15 @@ class TodoListViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoItemCell", for: indexPath)
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
         
         if let item = todoItems?[indexPath.row] {
-            
+
             cell.textLabel?.text = item.title
             
             // Ternary operator ==> * value == condition ? valueifTrue : valueifFalse
-            
             cell.accessoryType = item.done ? .checkmark : .none
+            
         } else {
             cell.textLabel?.text = "No Items Added Yet"
         }
@@ -60,16 +62,18 @@ class TodoListViewController: UITableViewController {
         if let item = todoItems?[indexPath.row] {
             do {
                 try realm.write {
-                    realm.delete(item)
+//                    realm.delete(item)
                     item.done = !item.done
                 }
             } catch {
                 print("Error saving done status, \(error)")
             }
-         }
-        tableView.reloadData()
+        }
         
+        tableView.reloadData()
+        tableView.deselectRow(at: indexPath, animated: true)
     }
+    
     
     // MARK: - Add new Items
     
@@ -114,7 +118,20 @@ class TodoListViewController: UITableViewController {
         
         tableView.reloadData()
     }
+    
+    override func updateModel(at indexPath: IndexPath) {
+        if let item = todoItems?[indexPath.row] {
+            do {
+                try realm.write {
+                    realm.delete(item)
+                }
+            } catch {
+                print("Error deleting item, \(error)")
+            }
+        }
+    }
 }
+    
 
 
 // MARK: - Search Bar Methods
