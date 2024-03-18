@@ -11,7 +11,6 @@ import SwipeCellKit
 
 class SwipeTableViewController: UITableViewController, SwipeTableViewCellDelegate {
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
