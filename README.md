@@ -1,5 +1,5 @@
 # TaskMaster iOS
- A to-do list/productivity iOS app inspired by the "Clear" designed to help users organize their tasks and stay focused on what matters most.
+ A colorful to-do list/productivity iOS app designed to help users organize their tasks and stay focused on what matters most.
  
 ## Features
 - Colorful Lists 
